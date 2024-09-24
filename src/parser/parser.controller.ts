@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { ParserService } from './parser.service';
+import fs from 'fs';
 
 @Controller('parser')
 export class ParserController {
@@ -11,8 +12,10 @@ export class ParserController {
   }
 
   @Get()
-  getHello(): string {
-    return "Parse Controller: Still gotta do something here. :-D";
+  getDefault(): string {
+    const codeContent = fs.readFileSync('./CartEntryServlet.java', 'utf8');
+
+    return this.parserService.parseCode(codeContent);
   }
 
 }
