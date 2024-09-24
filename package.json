@@ -25,7 +25,9 @@
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-fastify": "^10.4.4",
     "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-java": "^0.23.2"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
