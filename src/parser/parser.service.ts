@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import Parser from 'tree-sitter'
 import Java from 'tree-sitter-java'
-import fs from 'fs'
 
 @Injectable()
 export class ParserService {

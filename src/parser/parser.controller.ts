@@ -5,14 +5,14 @@ import { ParserService } from './parser.service';
 export class ParserController {
   constructor(private readonly parserService: ParserService) {}
 
-  // @Post()
-  // parseCode(@Body('code') code: string) {
-  //   return this.parserService.parseCode(code);
-  // }
+  @Post()
+  parseCode(@Body('code') code: string) {
+    return this.parserService.parseCode(code);
+  }
 
   @Get()
   getHello(): string {
-    return this.parserService.parseCode();
+    return "Parse Controller: Still gotta do something here. :-D";
   }
 
 }
