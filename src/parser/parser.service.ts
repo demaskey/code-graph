@@ -21,7 +21,9 @@ export class ParserService {
         let output = "";
         for(const cap of captures) {
             output += "Name: " + cap.name + "\n";
-            output += "Node: " + cap.node + "\n\n";
+            output += "text: " + cap.text + "\n";
+            output += this.printASTNodeInfo(cap.node);
+            output += "\n\n"
         }
         return output;
     }
