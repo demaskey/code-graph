@@ -16,8 +16,6 @@ export class ParserService {
       bufferSize: 1024 * 1024,
     });
 
-    // return this.printASTNodeInfo(tree.rootNode);
-
     const query = new Query(
       Java,
       '(class_declaration name: (identifier) @name) @definition.class',
@@ -26,7 +24,11 @@ export class ParserService {
     let output = '';
     for (const cap of captures) {
       output += 'capture.Name: ' + cap.name + '\n';
-      output += this.printASTNodeInfo(cap.node, '');
+      output += 'capture.node.type: ' + cap.node.type + '\n';
+      if(cap.name === 'name') {
+        output += 'capture.node.text: ' + cap.node.text + '\n';
+      }
+      // output += this.printASTNodeInfo(cap.node, '');
       output += '\n\n';
     }
     return output;
