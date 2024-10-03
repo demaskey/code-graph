@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import Parser, { Query, QueryCapture, SyntaxNode } from 'tree-sitter';
 import Java from 'tree-sitter-java';
+import fs  from 'fs';
 
 @Injectable()
 export class ParserService {
@@ -30,12 +31,13 @@ export class ParserService {
   }
 
   getQueryCaptures(rootNode:SyntaxNode, desiredQuery: string): QueryCapture[] {
-    let queryText = '';
-    if(desiredQuery === 'definition.class') {
-      queryText = '(class_declaration name: (identifier) @name) @definition.class';
-    } else if(desiredQuery === 'reference.class') {
-      queryText = '(object_creation_expression type: (type_identifier) @name) @reference.class (superclass (type_identifier) @name) @reference.class';
-    }
+    // let queryText = '';
+    // if(desiredQuery === 'definition.class') {
+    //   queryText = '(class_declaration name: (identifier) @name) @definition.class';
+    // } else if(desiredQuery === 'reference.class') {
+    //   queryText = '(object_creation_expression type: (type_identifier) @name) @reference.class (superclass (type_identifier) @name) @reference.class';
+    // }
+    let queryText = fs.readFileSync('./tags.scm');
     let query = new Query(Java, queryText);
     return query.captures(rootNode);
   }
