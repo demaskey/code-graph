@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import Parser, { Query, SyntaxNode } from 'tree-sitter';
+import Parser, { Query, QueryCapture, SyntaxNode } from 'tree-sitter';
 import Java from 'tree-sitter-java';
 
 @Injectable()
@@ -16,11 +16,7 @@ export class ParserService {
       bufferSize: 1024 * 1024,
     });
 
-    const query = new Query(
-      Java,
-      '(class_declaration name: (identifier) @name) @definition.class',
-    );
-    const captures = query.captures(tree.rootNode);
+    let captures = this.getQueryCaptures(tree.rootNode,'reference.class');
     let output = '';
     for (const cap of captures) {
       output += 'capture.Name: ' + cap.name + '\n';
@@ -28,13 +24,23 @@ export class ParserService {
       if(cap.name === 'name') {
         output += 'capture.node.text: ' + cap.node.text + '\n';
       }
-      // output += this.printASTNodeInfo(cap.node, '');
       output += '\n\n';
     }
     return output;
   }
 
-  printASTNodeInfo(rootNode: SyntaxNode, strPrefix: string) {
+  getQueryCaptures(rootNode:SyntaxNode, desiredQuery: string): QueryCapture[] {
+    let queryText = '';
+    if(desiredQuery === 'definition.class') {
+      queryText = '(class_declaration name: (identifier) @name) @definition.class';
+    } else if(desiredQuery === 'reference.class') {
+      queryText = '(object_creation_expression type: (type_identifier) @name) @reference.class (superclass (type_identifier) @name) @reference.class';
+    }
+    let query = new Query(Java, queryText);
+    return query.captures(rootNode);
+  }
+
+  printASTNodeInfo(rootNode: SyntaxNode, strPrefix: string): string {
     let output = '';
     if (rootNode.isNamed) {
       output += strPrefix + 'Node type: ' + rootNode.type + '\n';
@@ -43,18 +49,18 @@ export class ParserService {
       }
     }
 
-    // for (const child of rootNode.children) {
-    //   if (child.children.length > 0) {
-    //     output += this.printASTNodeInfo(child, strPrefix + '  ');
-    //   } else {
-    //     if (child.isNamed) {
-    //       if (child.text) {
-    //         output += strPrefix + '  - Child node type: ' + child.type + '\n';
-    //         output += strPrefix + '    - Text Content: ' + child.text + '\n';
-    //       }
-    //     }
-    //   }
-    // }
+    for (const child of rootNode.children) {
+      if (child.children.length > 0) {
+        output += this.printASTNodeInfo(child, strPrefix + '  ');
+      } else {
+        if (child.isNamed) {
+          if (child.text) {
+            output += strPrefix + '  - Child node type: ' + child.type + '\n';
+            output += strPrefix + '    - Text Content: ' + child.text + '\n';
+          }
+        }
+      }
+    }
 
     return output;
   }
