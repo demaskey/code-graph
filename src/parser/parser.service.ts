@@ -25,7 +25,7 @@ export class ParserService {
     const captures = query.captures(tree.rootNode);
     let output = '';
     for (const cap of captures) {
-      output += 'cap.Name: ' + cap.name + '\n';
+      output += 'capture.Name: ' + cap.name + '\n';
       output += this.printASTNodeInfo(cap.node, '');
       output += '\n\n';
     }
@@ -33,21 +33,26 @@ export class ParserService {
   }
 
   printASTNodeInfo(rootNode: SyntaxNode, strPrefix: string) {
-    let output = strPrefix + 'Node type: ' + rootNode.type + '\n';
-
-    for (const child of rootNode.children) {
-      output += strPrefix + '  - Child node type: ' + child.type + '\n';
-
-      if (child.children.length > 0) {
-        output += this.printASTNodeInfo(child, strPrefix + '  ');
-      } else {
-        if (child.isNamed) {
-          if (child.text) {
-            output += strPrefix + '    - Text Content: ' + child.text + '\n';
-          }
-        }
+    let output = '';
+    if (rootNode.isNamed) {
+      output += strPrefix + 'Node type: ' + rootNode.type + '\n';
+      if(rootNode.type === 'identifier'){
+        output += strPrefix + 'Node text: ' + rootNode.text + '\n';
       }
     }
+
+    // for (const child of rootNode.children) {
+    //   if (child.children.length > 0) {
+    //     output += this.printASTNodeInfo(child, strPrefix + '  ');
+    //   } else {
+    //     if (child.isNamed) {
+    //       if (child.text) {
+    //         output += strPrefix + '  - Child node type: ' + child.type + '\n';
+    //         output += strPrefix + '    - Text Content: ' + child.text + '\n';
+    //       }
+    //     }
+    //   }
+    // }
 
     return output;
   }
