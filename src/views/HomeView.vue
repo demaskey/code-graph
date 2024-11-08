@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import TreeSitterParser from '@/components/TreeSitterParser.vue';
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <TreeSitterParser />
   </main>
 </template>
