@@ -16,6 +16,8 @@
   },
   "dependencies": {
     "pinia": "^2.2.4",
+    "tree-sitter": "^0.21.1",
+    "tree-sitter-java": "^0.23.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   },
